@@ -16,10 +16,18 @@ class User {
     console.log(this.password);
   }
 
-  //get (get)
-  // get_user(id, result) {
+  //get 
+  get_user(userId, result) {
+    const queryString = `SELECT * FROM registered where personalid=${userId}`;
 
-  // }
+    sql.query(queryString, (err, res) => {
+      if(err) {
+        throw err;
+      }else {
+        return result(null, res);
+      }
+    })
+  }
 
   //getall
   get_allUsers(result) {
@@ -31,11 +39,12 @@ class User {
       }else {
         return result(null, res);
       }
+
     });
 
   }
 
-  //add (post)
+  //add
   add_user(user) {
     const queryString = `INSERT INTO registered (email, password) VALUES ('${user.email}', '${user.password}')`;
     console.log(typeof user);
@@ -48,9 +57,32 @@ class User {
     });
   }
 
-  //update (post)
+  //update
+  update_user(user, userId) {
+    const queryString = `UPDATE registered SET email='${user.email}', password='${user.password}' where personalid=${userId}`;
 
-  //delete (delete)
+    sql.query(queryString, (err, res) => {
+      if(err) {
+        throw err;
+      }else {
+        console.log(`updated user id ${userId} information`);
+      }
+    })
+  } 
+
+  //delete
+  delete_user(userId) {
+    const queryString = `DELETE FROM registered where personalid=${userId}`;
+
+    sql.query(queryString, (err, res) => {
+      if(err) {
+        throw err;
+      }else {
+        console.log(`user id ${userId} has been deleted`);
+      }
+    });
+  }
+  
 
 }
 
