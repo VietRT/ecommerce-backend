@@ -1,4 +1,5 @@
 const sql = require("../routes/sql");
+const bcrypt = require("bcrypt");
 
 class User {
 
@@ -7,13 +8,22 @@ class User {
 
   constructor(user) {
     this.email = user.email;
+    // this.password = this.hashing(user.password);
     this.password = user.password;
   }
 
-  test() {
-    console.log("user class");
-    console.log(this.email);
-    console.log(this.password);
+ async hashing(password) {
+
+    return bcrypt.genSalt(10)
+    .then(salt => {
+      return bcrypt.hash(password, salt);
+    })
+    .then(hashed => {
+      return hashed;
+    })
+    .catch(err => {
+      throw err;
+    })
   }
 
   //get 
@@ -45,16 +55,32 @@ class User {
   }
 
   //add
-  add_user(user) {
-    const queryString = `INSERT INTO registered (email, password) VALUES ('${user.email}', '${user.password}')`;
-    console.log(typeof user);
-     sql.query(queryString, (err) => {
+  add_user(user, result) {
+
+    const queryString = `SELECT email FROM registered where email='${user.email}'`;
+
+    sql.query(queryString, (err, res) => {
       if(err) {
-        console.log(err.message);
+        throw err;
       }else {
-        console.log(`user ${user.email} has been registered`);
+        if(Object.keys(res).length === 0) {
+          this.hashing(user.password).then(hashed => {
+            const queryString = `INSERT INTO registered (email, password) VALUES ('${user.email}', '${hashed}')`;
+      
+              sql.query(queryString, (err) => {
+                if(err) {
+                  console.log(err.message);
+                }else {
+                  console.log(`user ${user.email} has been registered`);
+                }
+              });
+          });
+          result(null,'email registered!');
+        }else {
+          result(null, `${user.email} is taken`);
+        }    
       }
-    });
+    });     
   }
 
   //update
@@ -82,8 +108,7 @@ class User {
       }
     });
   }
-  
-
+ 
 }
 
 module.exports = User;

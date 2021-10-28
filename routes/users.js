@@ -21,9 +21,11 @@ router.post('/api/user', (req, res) => {
   controller.create({
     email: req.body.email,
     password: req.body.password
+  }, (data) => {
+    res.send(data);
   });
 
-  res.send(req.body);
+  // res.send(req.body);
 });
 
 router.post('/api/user/:id', (req, res) => {

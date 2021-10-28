@@ -6,7 +6,7 @@ POST http://localhost:3001/api/user
 Content-Type: application/json
 
 {
-  "email" : "rest_client_vscode_2000@yahoo.com",
+  "email" : "email_version_updated5@yahoo.com",
   "password" : "test"
 }
 

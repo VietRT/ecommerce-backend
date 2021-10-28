@@ -8,12 +8,20 @@ class Controller {
   }
 
   //create
-  create(req) {
+  create(req, result) {
     const user = new User({
       email: req.email, 
       password: req.password
     });
-    user.add_user(user);    
+
+    user.add_user(user, (err, res) => {
+      if(err) {
+        console.log('error in creating user');
+      }else {
+        result(res);
+      }
+    });
+       
   }
 
   //retreiveAll
