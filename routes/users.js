@@ -21,7 +21,13 @@ router.post('/api/user', (req, res) => {
   const controller = new Controller();
   
   controller.create(req.body, (data) => {
-    res.status(400).send(data);
+    if(data === 'required fields (*) must be filled in') {
+      res.status(400).send(data);
+    }else if (data === `${req.body.email} is taken`) {
+      res.status(400).send(data);
+    }else {
+      res.send(data);
+    }
   });
 
 });

@@ -6,7 +6,7 @@ POST http://localhost:3001/api/user
 Content-Type: application/json
 
  {
-  "email" : "email_version_updated7@yahoo.com",
+  "email" : "email_version_updated8@yahoo.com",
   "password" : "test",
   "username": "ryan012297"
 }
@@ -23,4 +23,4 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3001/api/user/126
+DELETE http://localhost:3001/api/user/139

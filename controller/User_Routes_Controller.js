@@ -15,12 +15,8 @@ class Controller {
       password: req.password
     });
 
-    user.add_user(user, (err, res) => {
-      if(err) {
-        return result(err);
-      }else {
-        return result(res);
-      }
+    user.add_user(user, (res) => {
+      return result(res);
     });
        
   }

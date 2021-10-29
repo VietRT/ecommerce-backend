@@ -62,7 +62,7 @@ class User {
     for(const key in user) {
       // console.log(user[key].length);
       if(user[key].length === 0) {
-        return result('required fields (*) must be filled in', null);
+        return result('required fields (*) must be filled in');
       }
     }
 
@@ -86,9 +86,9 @@ class User {
                 }
               });
           });
-          return result(null,'email registered!');
+          return result('email registered!');
         }else {
-          return result(null, `${user.email} is taken`);
+          return result(`${user.email} is taken`);
         }    
       }
     });     
