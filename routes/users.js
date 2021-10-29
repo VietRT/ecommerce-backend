@@ -5,7 +5,7 @@ const Controller = require('../controller/User_Routes_Controller');
 router.get('/api/user', (req, res) => {
   const controller = new Controller();
   controller.retrieveAll((data) => {
-      res.send(data);
+    res.send(data);
   });
 });
 
@@ -17,24 +17,19 @@ router.get('/api/user/:id', (req, res) => {
 })
 
 router.post('/api/user', (req, res) => {
+
   const controller = new Controller();
-  controller.create({
-    email: req.body.email,
-    password: req.body.password
-  }, (data) => {
-    res.send(data);
+  
+  controller.create(req.body, (data) => {
+    res.status(400).send(data);
   });
 
-  // res.send(req.body);
 });
 
 router.post('/api/user/:id', (req, res) => {
   const controller = new Controller();
 
-  controller.update({
-    email: req.body.email,
-    password: req.body.password
-  }, req.params.id);
+  controller.update(req.body, req.params.id);
 });
 
 router.delete('/api/user/:id', (req, res) => {

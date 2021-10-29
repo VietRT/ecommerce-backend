@@ -3,10 +3,12 @@ const bcrypt = require("bcrypt");
 
 class User {
 
+  username;
   email;
   password;
 
   constructor(user) {
+    this.username = user.username;
     this.email = user.email;
     // this.password = this.hashing(user.password);
     this.password = user.password;
@@ -57,15 +59,24 @@ class User {
   //add
   add_user(user, result) {
 
+    for(const key in user) {
+      // console.log(user[key].length);
+      if(user[key].length === 0) {
+        return result('required fields (*) must be filled in', null);
+      }
+    }
+
+
     const queryString = `SELECT email FROM registered where email='${user.email}'`;
 
     sql.query(queryString, (err, res) => {
       if(err) {
         throw err;
       }else {
+        //checking if email is taken
         if(Object.keys(res).length === 0) {
           this.hashing(user.password).then(hashed => {
-            const queryString = `INSERT INTO registered (email, password) VALUES ('${user.email}', '${hashed}')`;
+            const queryString = `INSERT INTO registered (email, password, username) VALUES ('${user.email}', '${hashed}', '${user.username}')`;
       
               sql.query(queryString, (err) => {
                 if(err) {
@@ -75,9 +86,9 @@ class User {
                 }
               });
           });
-          result(null,'email registered!');
+          return result(null,'email registered!');
         }else {
-          result(null, `${user.email} is taken`);
+          return result(null, `${user.email} is taken`);
         }    
       }
     });     

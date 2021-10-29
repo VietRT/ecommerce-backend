@@ -10,15 +10,16 @@ class Controller {
   //create
   create(req, result) {
     const user = new User({
+      username: req.username,
       email: req.email, 
       password: req.password
     });
 
     user.add_user(user, (err, res) => {
       if(err) {
-        console.log('error in creating user');
+        return result(err);
       }else {
-        result(res);
+        return result(res);
       }
     });
        
@@ -27,6 +28,7 @@ class Controller {
   //retreiveAll
   retrieveAll(result) {
     const user = new User({
+      username: null,
       email: null,
       password: null
     });
@@ -35,7 +37,7 @@ class Controller {
       if(err) {
         console.log("error in retrieving users");
       }else {
-        result(res);
+        return result(res);
       }
 
     });
@@ -44,6 +46,7 @@ class Controller {
   //retrieve
   retrieve(userId, result) {
     const user = new User({
+      username: null,
       email: null,
       password: null
     });
@@ -52,7 +55,7 @@ class Controller {
       if(err) {
         console.log("error in retrieving");
       }else {
-        result(res);
+        return result(res);
       }
     })
   }
@@ -60,6 +63,7 @@ class Controller {
   //update
   update(req, userId) {
     const user = new User({
+      username: req.username,
       email: req.email,
       password: req.password
     });
@@ -70,6 +74,7 @@ class Controller {
   //delete
   delete(userId) {
     const user = new User({
+      username: null,
       email: null,
       password: null
     });

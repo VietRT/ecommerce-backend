@@ -5,14 +5,15 @@ GET http://localhost:3001/api/user/
 POST http://localhost:3001/api/user
 Content-Type: application/json
 
-{
-  "email" : "email_version_updated5@yahoo.com",
-  "password" : "test"
+ {
+  "email" : "email_version_updated7@yahoo.com",
+  "password" : "test",
+  "username": "ryan012297"
 }
 
 ###
 
-POST http://localhost:3001/api/user/45
+POST http://localhost:3001/api/user/106
 Content-Type: application/json
 
 {
@@ -22,4 +23,4 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3001/api/user/45
+DELETE http://localhost:3001/api/user/126
