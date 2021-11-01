@@ -21,9 +21,17 @@ router.post('/api/user', (req, res) => {
   const controller = new Controller();
   
   controller.create(req.body, (data) => {
-    if(data === 'required fields (*) must be filled in') {
+    console.log(data);
+    if(data === 'Required fields (*) must be filled in.') {
       res.status(400).send(data);
-    }else if (data === `${req.body.email} is taken`) {
+    }else if(data === `Username must be between 6 to 12 characters long.`) {
+      res.status(400).send(data);
+    }else if (data === `${req.body.email} is not valid, please enter a valid email address.`) {
+      res.status(400).send(data);
+    }else if(data === `Password must be between 6 to 12 characters long.`) {
+      res.status(400).send(data);
+    }
+    else if( data === `${req.body.email} is taken.`) {
       res.status(400).send(data);
     }else {
       res.send(data);

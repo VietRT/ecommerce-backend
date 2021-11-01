@@ -23,4 +23,14 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3001/api/user/139
+DELETE http://localhost:3001/api/user/13
+
+###
+POST http://localhost:3001/v1/payment_intents
+Content-Type: application/json
+
+{
+  "amount": 1099,
+  "currency": 'usd',
+  "payment_method_types": ['card']
+}
