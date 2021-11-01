@@ -4,22 +4,23 @@ require('dotenv').config();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const items_list = require('../public/javascripts/items_list');
 
-router.post('/v1/payments/intents', async(req, res) => {
+router.post('/v1/payment-intents', async(req, res) => {
 
-})
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: req.body.amount,
+      currency: 'usd',
+      payment_method_types: ['card']
+    });
+
+    res.status(200).send(paymentIntent);
+  }catch(err){
+    res.status(500).send(err.message);
+  }
+
+});
 
 router.post('/create-stripe-session', async (req, res) => {
-
-  // req.body.map(item => {
-  //   let store_item = {};
-
-  //   items_list.forEach(server_item => {
-  //     if(server_item.id === item.id) {
-  //       store_item = server_item;
-  //     }
-  //   });
-  //   console.log(store_item);
-  // });
 
   try {
     const session = await stripe.checkout.sessions.create({
