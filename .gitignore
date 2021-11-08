@@ -1,6 +1,7 @@
 ##node module
 /node_modules
 
+
 ##environment variables
 .env
 .env.local
