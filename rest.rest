@@ -1,4 +1,4 @@
-GET http://localhost:3001/api/user/
+GET http://localhost:3001/api/user
 
 ###
 
