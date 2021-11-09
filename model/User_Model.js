@@ -45,31 +45,6 @@ class User {
     if(exit === false) {
       const queryString = `SELECT email FROM registered where email='${user.email}'`;
 
-      // sql.query(queryString, (err, res) => {
-      //   if(err) {
-      //     throw err;
-      //   }else {
-      //     //checking if email is taken
-      //     if(Object.keys(res).length === 0) {
-      //       this.hashing(user.password).then(hashed => {
-      //         const queryString = `INSERT INTO registered (email, password, username) VALUES ('${user.email}', '${hashed}', '${user.username}')`;
-        
-      //           sql.query(queryString, (err) => {
-      //             if(err) {
-      //               console.log(err.message);
-      //             }else {
-      //               console.log(`user ${user.email} has been registered`);
-      //               return result(false, 'Account created, you may log in using your credentials.');
-      //             }
-      //           });
-      //       });           
-      //     }else {
-      //       return result(false, `${user.email} is taken.`);
-      //     }    
-      //   }
-      // });
-
-
       sql.getConnection((err, connection) => {
         if(err) {
           return result(true);
@@ -105,14 +80,6 @@ class User {
   get_user(userId, result) {
     const queryString = `SELECT * FROM registered where personalid=${userId}`;
 
-    // sql.query(queryString, (err, res) => {
-    //   if(err) {
-    //     throw err;
-    //   }else {
-    //     return result(null, res);
-    //   }
-    // });
-
     sql.getConnection((err, connection) => {
       if(err) {
         return result(true);
@@ -135,14 +102,6 @@ class User {
   //getall
   get_allUsers(result) {
     const queryString = `SELECT * FROM registered`;
-
-    // sql.query(queryString, (err, res) => {
-    //   if(err) {
-    //     throw err;
-    //   }else {
-    //     return result(null, res);
-    //   }
-    // });
 
     sql.getConnection((err, connection) => {
       connection.release();
@@ -167,13 +126,6 @@ class User {
   update_user(user, userId) {
     const queryString = `UPDATE registered SET email='${user.email}', password='${user.password}' where personalid=${userId}`;
 
-    // sql.query(queryString, (err, res) => {
-    //   if(err) {
-    //     throw err;
-    //   }else {
-    //     console.log(`updated user id ${userId} information.`);
-    //   }
-    // });
     sql.getConnection((err, connection) => {
       if(err) {
         throw err;
@@ -196,13 +148,6 @@ class User {
   delete_user(userId) {
     const queryString = `DELETE FROM registered where personalid=${userId}`;
 
-    // sql.query(queryString, (err, res) => {
-    //   if(err) {
-    //     throw err;
-    //   }else {
-    //     console.log(`user id ${userId} has been deleted.`);
-    //   }
-    // });
     sql.getConnection((err, connection) => {
       if(err) {
         throw err;
