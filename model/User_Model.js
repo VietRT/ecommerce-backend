@@ -45,34 +45,33 @@ class User {
     if(exit === false) {
       const queryString = `SELECT email FROM registered where email='${user.email}'`;
 
-      sql.query(queryString, (err, res) => {
-        if(err) {
-          throw err;
-        }else {
-          //checking if email is taken
-          if(Object.keys(res).length === 0) {
-            this.hashing(user.password).then(hashed => {
-              const queryString = `INSERT INTO registered (email, password, username) VALUES ('${user.email}', '${hashed}', '${user.username}')`;
+      // sql.query(queryString, (err, res) => {
+      //   if(err) {
+      //     throw err;
+      //   }else {
+      //     //checking if email is taken
+      //     if(Object.keys(res).length === 0) {
+      //       this.hashing(user.password).then(hashed => {
+      //         const queryString = `INSERT INTO registered (email, password, username) VALUES ('${user.email}', '${hashed}', '${user.username}')`;
         
-                sql.query(queryString, (err) => {
-                  if(err) {
-                    console.log(err.message);
-                  }else {
-                    console.log(`user ${user.email} has been registered`);
-                    return result('Account created, you may log in using your credentials.');
-                  }
-                });
-            });           
-          }else {
-            return result(`${user.email} is taken.`);
-          }    
-        }
-      });
+      //           sql.query(queryString, (err) => {
+      //             if(err) {
+      //               console.log(err.message);
+      //             }else {
+      //               console.log(`user ${user.email} has been registered`);
+      //               return result(false, 'Account created, you may log in using your credentials.');
+      //             }
+      //           });
+      //       });           
+      //     }else {
+      //       return result(false, `${user.email} is taken.`);
+      //     }    
+      //   }
+      // });
 
 
       sql.getConnection((err, connection) => {
         if(err) {
-          console.log('1');
           return result(true);
         }else {
           //checking if email is taken
@@ -83,7 +82,6 @@ class User {
 
                 sql.query(queryString, (err) => {
                   if(err) {
-                    console.log('2');
                     return result(true);
                   }else {
                     console.log(`user ${user.email} has been registered`);
@@ -92,13 +90,11 @@ class User {
                 });
               });                        
             } else {
-              console.log('3');
               return result(false, `${user.email} is taken.`);
             }
           });                
         }
         connection.on('error', (err) => {
-          console.log('4');
           return result(true);
         });
       });  
