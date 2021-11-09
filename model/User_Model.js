@@ -29,34 +29,6 @@ class User {
     })
   }
 
-  //get 
-  get_user(userId, result) {
-    const queryString = `SELECT * FROM registered where personalid=${userId}`;
-
-    sql.query(queryString, (err, res) => {
-      if(err) {
-        throw err;
-      }else {
-        return result(null, res);
-      }
-    })
-  }
-
-  //getall
-  get_allUsers(result) {
-    const queryString = `SELECT * FROM registered`;
-
-    sql.query(queryString, (err, res) => {
-      if(err) {
-        throw err;
-      }else {
-        return result(null, res);
-      }
-
-    });
-
-  }
-
   //add
   add_user(user, result) {
 
@@ -65,7 +37,7 @@ class User {
     validate_user(user, (invalid, res) => {
       if(invalid === true) {
         exit = true;
-        return result(res);
+        return result(false, res);
       }
     });
 
@@ -95,34 +67,161 @@ class User {
             return result(`${user.email} is taken.`);
           }    
         }
+      });
+
+
+      sql.getConnection((err, connection) => {
+        if(err) {
+          console.log('1');
+          return result(true);
+        }else {
+          //checking if email is taken
+          sql.query(queryString, (err, res) => {
+            if(Object.keys(res).length === 0) {
+              this.hashing(user.password).then(hashed => {
+                const queryString = `INSERT INTO registered (email, password, username) VALUES ('${user.email}', '${hashed}', '${user.username}')`;
+
+                sql.query(queryString, (err) => {
+                  if(err) {
+                    console.log('2');
+                    return result(true);
+                  }else {
+                    console.log(`user ${user.email} has been registered`);
+                    return result(false, 'Account created, you may log in using your credentials.');
+                  }
+                });
+              });                        
+            } else {
+              console.log('3');
+              return result(false, `${user.email} is taken.`);
+            }
+          });                
+        }
+        connection.on('error', (err) => {
+          console.log('4');
+          return result(true);
+        });
       });  
-    }
-       
+    }      
+  }
+
+  //get 
+  get_user(userId, result) {
+    const queryString = `SELECT * FROM registered where personalid=${userId}`;
+
+    // sql.query(queryString, (err, res) => {
+    //   if(err) {
+    //     throw err;
+    //   }else {
+    //     return result(null, res);
+    //   }
+    // });
+
+    sql.getConnection((err, connection) => {
+      if(err) {
+        return result(true);
+      }
+      sql.query(queryString, (err, res) => {
+        connection.release();
+        if(err) {
+          return result(true);
+        }else {
+          return result(false, res);
+        }
+      });
+      connection.on('error', (err) => {
+        return result(true);
+      });
+    });
+
+  }
+
+  //getall
+  get_allUsers(result) {
+    const queryString = `SELECT * FROM registered`;
+
+    // sql.query(queryString, (err, res) => {
+    //   if(err) {
+    //     throw err;
+    //   }else {
+    //     return result(null, res);
+    //   }
+    // });
+
+    sql.getConnection((err, connection) => {
+      connection.release();
+      if(err) {
+        return result(true);
+      }
+      sql.query(queryString, (err, res) => {
+        if(err) {
+          return result(true);
+        }else {
+          return result(false, res);
+        }
+      });
+      connection.on('error', (err)=> {
+        return result(true);
+      })
+    });
+
   }
 
   //update
   update_user(user, userId) {
     const queryString = `UPDATE registered SET email='${user.email}', password='${user.password}' where personalid=${userId}`;
 
-    sql.query(queryString, (err, res) => {
+    // sql.query(queryString, (err, res) => {
+    //   if(err) {
+    //     throw err;
+    //   }else {
+    //     console.log(`updated user id ${userId} information.`);
+    //   }
+    // });
+    sql.getConnection((err, connection) => {
       if(err) {
         throw err;
-      }else {
-        console.log(`updated user id ${userId} information.`);
       }
-    })
+      sql.query(queryString, (err, res) => {
+        connection.release();
+        if(err) {
+          throw err;
+        }else {
+          console.log(`updated user id ${userId} information.`);
+        }
+      });
+      connection.on('error', (err) => {
+        throw err;
+      });
+    });
   } 
 
   //delete
   delete_user(userId) {
     const queryString = `DELETE FROM registered where personalid=${userId}`;
 
-    sql.query(queryString, (err, res) => {
+    // sql.query(queryString, (err, res) => {
+    //   if(err) {
+    //     throw err;
+    //   }else {
+    //     console.log(`user id ${userId} has been deleted.`);
+    //   }
+    // });
+    sql.getConnection((err, connection) => {
       if(err) {
         throw err;
-      }else {
-        console.log(`user id ${userId} has been deleted.`);
       }
+      sql.query(queryString, (err, res) => {
+        connection.release();
+        if(err) {
+          throw err;
+        }else {
+          console.log(`user id ${userId} has been deleted.`);
+        }
+      });
+      connection.on('error', (err) => {
+        throw err;
+      });
     });
   }
  

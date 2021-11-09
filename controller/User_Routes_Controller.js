@@ -15,10 +15,31 @@ class Controller {
       password: req.password
     });
 
-    user.add_user(user, (res) => {
-      return result(res);
+    user.add_user(user, (err, res) => {
+      if(err) {
+        console.log('error in creating new user');
+      }else {
+        return result(res);
+      }      
     });
        
+  }
+
+  //retrieve
+  retrieve(userId, result) {
+    const user = new User({
+      username: null,
+      email: null,
+      password: null
+    });
+
+    user.get_user(userId, (err, res) => {
+      if(err) {
+        console.log("error in retrieving");
+      }else {
+        return result(res);
+      }
+    })
   }
 
   //retreiveAll
@@ -37,23 +58,6 @@ class Controller {
       }
 
     });
-  }
-
-  //retrieve
-  retrieve(userId, result) {
-    const user = new User({
-      username: null,
-      email: null,
-      password: null
-    });
-
-    user.get_user(userId, (err, res) => {
-      if(err) {
-        console.log("error in retrieving");
-      }else {
-        return result(res);
-      }
-    })
   }
 
   //update

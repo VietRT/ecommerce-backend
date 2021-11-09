@@ -7,7 +7,7 @@ Content-Type: application/json
 
  {
   "email" : "email_version_updated8@yahoo.com",
-  "password" : "test",
+  "password" : "test123456",
   "username": "ryan012297"
 }
 
@@ -23,7 +23,7 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3001/api/user/13
+DELETE http://localhost:3001/api/user/25
 
 ###
 POST http://localhost:3001/v1/payment-intents
