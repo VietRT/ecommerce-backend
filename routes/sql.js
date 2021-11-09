@@ -15,7 +15,7 @@ try {
   })
 }
 catch(error) {
-    console.log('error when connecting to db:', err.code);
+    console.log('error when connecting to db:', error.code);
 }
 
 module.exports = sql;
