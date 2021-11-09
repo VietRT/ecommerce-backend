@@ -40,7 +40,7 @@ router.post('/create-stripe-session', async (req, res) => {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: store_item.title
+              name: store_item.title.concat(', size(', item.size, ')')
             },
             unit_amount: store_item.price,
           },
