@@ -1,5 +1,11 @@
-// const path = require('path');
-// require('dotenv').config({path: path.join(__dirname, `../.env.${process.env.NODE_ENV}`)});
+const path = require('path');
+
+try {
+  require('dotenv').config({path: path.join(__dirname, `../.env.${process.env.NODE_ENV}`)});
+}catch(err) {
+  //dotenv file will not be used in production
+}
+
 const mysql = require('mysql');
 
 const sqlPool = new mysql.createPool({
