@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-require('dotenv').config();
+// require('dotenv').config();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const items_list = require('../public/javascripts/items_list');
 
