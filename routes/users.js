@@ -40,16 +40,13 @@ router.post('/api/user', (req, res) => {
 
 });
 
-router.post('/api/user/:id', (req, res) => {
+router.post('/api/user/:id', (req) => {
   const controller = new Controller();
-
   controller.update(req.body, req.params.id);
 });
 
-router.delete('/api/user/:id', (req, res) => {
+router.delete('/api/user/:id', (req) => {
   const controller = new Controller();
-  console.log('delete method');
-  console.log(req.params.id);
   controller.delete(req.params.id);
 });
 

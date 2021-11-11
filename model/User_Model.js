@@ -11,7 +11,6 @@ class User {
   constructor(user) {
     this.username = user.username;
     this.email = user.email;
-    // this.password = this.hashing(user.password);
     this.password = user.password;
   }
 
@@ -29,7 +28,6 @@ class User {
     })
   }
 
-  //add
   add_user(user, result) {
 
     let exit = false;
@@ -69,103 +67,96 @@ class User {
             }
           });                
         }
-        connection.on('error', (err) => {
+        connection.on('error', () => {
           return result(true);
         });
       });  
     }      
   }
 
-  //get 
   get_user(userId, result) {
     const queryString = `SELECT * FROM registered where personalid=${userId}`;
 
     sql.getConnection((err, connection) => {
-      if(err) {
+      if(err) 
         return result(true);
-      }
+      
       sql.query(queryString, (err, res) => {
         connection.release();
-        if(err) {
+        if(err) 
           return result(true);
-        }else {
-          return result(false, res);
-        }
+        else 
+          return result(false, res);        
       });
-      connection.on('error', (err) => {
+
+      connection.on('error', () => {
         return result(true);
       });
     });
-
   }
 
-  //getall
-  get_allUsers(result) {
+  get_all(result) {
     const queryString = `SELECT * FROM registered`;
 
     sql.getConnection((err, connection) => {
       connection.release();
-      if(err) {
+      if(err) 
         return result(true);
-      }
+      
       sql.query(queryString, (err, res) => {
-        if(err) {
+        if(err) 
           return result(true);
-        }else {
+        else 
           return result(false, res);
-        }
       });
-      connection.on('error', (err)=> {
-        return result(true);
-      })
-    });
 
+      connection.on('error', () => {
+        return result(true);
+      });
+    });
   }
 
-  //update
   update_user(user, userId) {
     const queryString = `UPDATE registered SET email='${user.email}', password='${user.password}' where personalid=${userId}`;
 
     sql.getConnection((err, connection) => {
-      if(err) {
+      if(err) 
         throw err;
-      }
-      sql.query(queryString, (err, res) => {
+    
+      sql.query(queryString, (err) => {
         connection.release();
-        if(err) {
-          throw err;
-        }else {
-          console.log(`updated user id ${userId} information.`);
-        }
+        if(err) 
+          throw err; 
+        else 
+          console.log(`updated user id ${userId} information.`);        
       });
+
       connection.on('error', (err) => {
         throw err;
       });
     });
   } 
 
-  //delete
   delete_user(userId) {
     const queryString = `DELETE FROM registered where personalid=${userId}`;
 
     sql.getConnection((err, connection) => {
-      if(err) {
+      if(err) 
         throw err;
-      }
-      sql.query(queryString, (err, res) => {
+      
+      sql.query(queryString, (err) => {
         connection.release();
-        if(err) {
+        if(err) 
           throw err;
-        }else {
-          console.log(`user id ${userId} has been deleted.`);
-        }
+        else 
+          console.log(`user id ${userId} has been deleted.`);        
       });
+
       connection.on('error', (err) => {
         throw err;
       });
     });
-  }
- 
+  } 
 }
 
 function validate_user(user, result) {
@@ -187,8 +178,7 @@ function validate_user(user, result) {
   if(user.password.length < 6 || user.password.length > 12) {
     return result(true, `Password must be between 6 to 12 characters long.`);
   }
-
-
+  
   return false;
 }
 
