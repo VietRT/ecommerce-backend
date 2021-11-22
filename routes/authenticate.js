@@ -25,49 +25,84 @@ router.post('/login/user/auth', (req, res) => {
       connection.release(); 
 
     
-      sql.query(queryString, (err, result) => {
+      sql.query(queryString, async (err, result) => {
         if(err) 
           console.log('error in querying user credentials ', err.message);
 
         if(result.length === 0) {
           return res.status(400).send('Could not locate any credentials on record.');
         }
-    
-        bcrypt.compare(req.body.password, result[0].password, async (err, conclusion) => {
-          if(err) 
-            console.log('error in password comparison ', err);
-          
-          if(!conclusion) {
-            // return res.status(400).send('Incorrect login credentials. Please try again. testing');
-            return res.status(400).send(conclusion);
-          }else {
 
-            jwt.sign({
-              // email: req.body.email,
-              // user: result[0].username
-              email:  await bcrypt.hash(req.body.email, 10),
-              user: await bcrypt.hash(result[0].username, 10)
-            },
-            process.env.SECRET, 
-            {
-              expiresIn: '300s'
-            }, (err, token) => {
-              if(err) {
-                console.log('error jwt token creation ', err);
-              }
+        // bcrypt.compare(req.body.password, result[0].password)
+        // .then(result => res.send(result));
 
-              res.cookie('token', token, {
-                expires: new Date(Date.now() + (30 * 60 * 1000)),
-                // expires: new Date(Date.now() + (30 * 1000)),
-                httpOnly: true,
-                secure: true,
-                sameSite: 'lax',
-                path: '/'
-              });
-              res.status(200).send(result[0].username);
+        const comparison = await bcrypt.compare(req.body.password, result[0].password);
+
+        if (comparison === false) {
+          return res.status(400).send('Incorrect login credentials. Please try again,');
+        }else {
+          jwt.sign({
+            // email: req.body.email,
+            // user: result[0].username
+            email:  await bcrypt.hash(req.body.email, 10),
+            user: await bcrypt.hash(result[0].username, 10)
+          },
+          process.env.SECRET, 
+          {
+            expiresIn: '300s'
+          }, (err, token) => {
+            if(err) {
+              console.log('error jwt token creation ', err);
+            }
+
+            res.cookie('token', token, {
+              expires: new Date(Date.now() + (30 * 60 * 1000)),
+              // expires: new Date(Date.now() + (30 * 1000)),
+              httpOnly: true,
+              secure: true,
+              sameSite: 'lax',
+              path: '/'
             });
-          }   
-        });
+            res.status(200).send(result[0].username);
+          });
+        }
+    
+        // bcrypt.compare(req.body.password, result[0].password, async (err, conclusion) => 
+        // {
+        //   if(err) 
+        //     console.log('error in password comparison ', err);
+          
+        //   if(!conclusion) {
+        //     return res.status(400).send('Incorrect login credentials. Please try again,');
+
+        //   }else {
+
+        //     jwt.sign({
+        //       // email: req.body.email,
+        //       // user: result[0].username
+        //       email:  await bcrypt.hash(req.body.email, 10),
+        //       user: await bcrypt.hash(result[0].username, 10)
+        //     },
+        //     process.env.SECRET, 
+        //     {
+        //       expiresIn: '300s'
+        //     }, (err, token) => {
+        //       if(err) {
+        //         console.log('error jwt token creation ', err);
+        //       }
+
+        //       res.cookie('token', token, {
+        //         expires: new Date(Date.now() + (30 * 60 * 1000)),
+        //         // expires: new Date(Date.now() + (30 * 1000)),
+        //         httpOnly: true,
+        //         secure: true,
+        //         sameSite: 'lax',
+        //         path: '/'
+        //       });
+        //       res.status(200).send(result[0].username);
+        //     });
+        //   }   
+        // });
       });
   });
 });
