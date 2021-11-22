@@ -12,3 +12,7 @@ To start this project in development, make sure to ofcourse have NodeJS when att
 Next run npm start in the root folder
 
 Runs the app in the development mode.
+
+notes for session/login auth task:
+server checks for authentication
+if successful, jwt is stored in httponly cookie
