@@ -22,52 +22,52 @@ router.post('/login/user/auth', (req, res) => {
     if(err) 
       console.log('error in getting sql connection ', err.message);
     
-    connection.release();
+      connection.release(); 
 
     
-    sql.query(queryString, (err, result) => {
-      if(err) 
-        console.log('error in querying user credentials ', err.message);
-
-      if(result.length === 0) {
-        return res.status(400).send('Could not locate any credentials on record.');
-      }
-  
-      bcrypt.compare(req.body.password, result[0].password, async (err, conclusion) => {
+      sql.query(queryString, (err, result) => {
         if(err) 
-          console.log('error in password comparison ', err);
-        
-        if(!conclusion) {
-          return res.status(400).send('Incorrect login credentials. Please try again.');
-        }else {
+          console.log('error in querying user credentials ', err.message);
 
-          jwt.sign({
-            // email: req.body.email,
-            // user: result[0].username
-            email:  await bcrypt.hash(req.body.email, 10),
-            user: await bcrypt.hash(result[0].username, 10)
-          },
-          process.env.SECRET, 
-          {
-            expiresIn: '300s'
-          }, (err, token) => {
-            if(err) {
-              console.log('error jwt token creation ', err);
-            }
+        if(result.length === 0) {
+          return res.status(400).send('Could not locate any credentials on record.');
+        }
+    
+        bcrypt.compare(req.body.password, result[0].password, async (err, conclusion) => {
+          if(err) 
+            console.log('error in password comparison ', err);
+          
+          if(!conclusion) {
+            return res.status(400).send('Incorrect login credentials. Please try again.');
+          }else {
 
-            res.cookie('token', token, {
-              expires: new Date(Date.now() + (30 * 60 * 1000)),
-              // expires: new Date(Date.now() + (30 * 1000)),
-              httpOnly: true,
-              secure: true,
-              sameSite: 'lax',
-              path: '/'
+            jwt.sign({
+              // email: req.body.email,
+              // user: result[0].username
+              email:  await bcrypt.hash(req.body.email, 10),
+              user: await bcrypt.hash(result[0].username, 10)
+            },
+            process.env.SECRET, 
+            {
+              expiresIn: '300s'
+            }, (err, token) => {
+              if(err) {
+                console.log('error jwt token creation ', err);
+              }
+
+              res.cookie('token', token, {
+                expires: new Date(Date.now() + (30 * 60 * 1000)),
+                // expires: new Date(Date.now() + (30 * 1000)),
+                httpOnly: true,
+                secure: true,
+                sameSite: 'lax',
+                path: '/'
+              });
+              res.status(200).send(result[0].username);
             });
-            res.status(200).send(result[0].username);
-          });
-        }   
+          }   
+        });
       });
-    });
   });
 });
 
