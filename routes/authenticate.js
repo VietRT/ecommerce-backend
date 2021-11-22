@@ -38,7 +38,8 @@ router.post('/login/user/auth', (req, res) => {
             console.log('error in password comparison ', err);
           
           if(!conclusion) {
-            return res.status(400).send('Incorrect login credentials. Please try again. testing');
+            // return res.status(400).send('Incorrect login credentials. Please try again. testing');
+            return res.status(400).send(result[0], req.body.password);
           }else {
 
             jwt.sign({
