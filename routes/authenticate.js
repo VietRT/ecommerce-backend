@@ -39,7 +39,7 @@ router.post('/login/user/auth', (req, res) => {
           
           if(!conclusion) {
             // return res.status(400).send('Incorrect login credentials. Please try again. testing');
-            return res.status(400).send('db result');
+            return res.status(400).send(req.body.password);
           }else {
 
             jwt.sign({
