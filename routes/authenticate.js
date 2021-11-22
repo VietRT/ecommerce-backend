@@ -39,7 +39,8 @@ router.post('/login/user/auth', (req, res) => {
           
           if(!conclusion) {
             // return res.status(400).send('Incorrect login credentials. Please try again. testing');
-            return res.status(400).send(result[0].password);
+            const pw = await bcrypt.hash(req.body.password, 10);
+            return res.status(400).send(pw);
           }else {
 
             jwt.sign({
