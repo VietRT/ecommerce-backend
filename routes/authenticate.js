@@ -63,8 +63,8 @@ router.post('/login/user/auth', (req, res) => {
                 expires: new Date(Date.now() + (30 * 60 * 1000)), //expires in 30 minutes
                 // expires: new Date(Date.now() + (30 * 1000)),
                 httpOnly: true,
-                secure:  process.env.NODE_ENV === "production" ? true : false, // must be true if sameSite='none'
-                sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax', // must be 'none' to enable cross-site delivery,
+                secure:  true,
+                sameSite:'lax', 
                 path: '/'
               });
               res.status(200).send(result[0].username);
