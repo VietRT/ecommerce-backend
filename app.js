@@ -18,6 +18,7 @@ app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.set("trust proxy",1);
 app.use(cors({origin: true, credentials: true}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
