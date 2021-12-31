@@ -18,11 +18,11 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 
-app.use(cors({origin: [process.env.FRONTEND_APP_URL], credentials: true, methods: 'GET, POST'}));
+app.use(cors({origin: process.env.FRONTEND_APP_URL, credentials: true, methods: 'GET, POST'}));
 
 app.all('*', function(req, res, next) {
 
-  res.setHeader("Access-Control-Allow-Origin", [process.env.FRONTEND_APP_URL]);
+  res.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_APP_URL);
   res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Origin, Content-Type, Accept");
   res.setHeader("Access-Control-Allow-Credentials", true);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
