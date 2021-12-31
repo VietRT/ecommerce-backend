@@ -64,7 +64,6 @@ router.post('/login/user/auth', (req, res) => {
                 // expires: new Date(Date.now() + (30 * 1000)),
                 httpOnly: true,
                 secure: true,
-                sameSite: 'lax',
                 path: '/'
               });
               res.status(200).send(result[0].username);
