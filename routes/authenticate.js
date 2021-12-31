@@ -45,11 +45,15 @@ router.post('/login/user/auth', (req, res) => {
 
             jwt.sign({
               email:  await bcrypt.hash(req.body.email, 10),
-              user: await bcrypt.hash(result[0].username, 10)
+              user: await bcrypt.hash(result[0].username, 10),
+              auth: 'member'
             },
             process.env.SECRET, 
             {
-              expiresIn: '300s'
+              expiresIn: '300s',
+              audience: process.env.AUDIENCE,
+              issuer: process.env.ISSUER,
+              subject: 'member'
             }, (err, token) => {
               if(err) {
                 console.log('error jwt token creation ', err);

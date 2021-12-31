@@ -1,21 +1,45 @@
 const express = require('express');
 const router = express.Router();
 const Controller = require('../controller/User_Routes_Controller');
+const jwt = require("jsonwebtoken");
 
+const validateAuthentication = function (req, res) {
 
-router.get('/api/user', (req, res) => {
-  const controller = new Controller();
-  controller.retrieveAll((data) => {
-    res.send(data);
-  });
+  // console.log(req.cookies["token"]);
+  const token = req.cookies["token"];
+  // console.log(token === undefined)
+
+  if(token === undefined) {
+    res.send({error: 'Not Found, No valid authentication'});
+  }else {
+    jwt.verify(token, process.env.SECRET, {
+    audience: process.env.AUDIENCE,
+    issuer: process.env.ISSUER,
+    subject: 'admin'
+    }, (err, decoded) => {
+      if(err) {
+        console.log(err);
+        res.send({error: 'not found, no valid authentication'});
+        return;
+      }
+
+      // console.log(decoded); returns the payload data
+      const controller = new Controller();
+      controller.retrieveAll((data) => {
+      res.send(data);
+      });
+    
+    });
+  }
+}
+
+router.get('/api/user', (request, response) => { 
+  validateAuthentication(request, response);
 });
 
-router.get('/api/user/:id', (req, res) => {
-  const controller = new Controller();
-  controller.retrieve(req.params.id, (data) => {
-    res.send(data);
-  })
-})
+router.get('/api/user/:id', (request, response) => {
+  validateAuthentication(request, response);
+});
 
 router.post('/api/user', (req, res) => {
 
