@@ -50,7 +50,7 @@ router.post('/login/user/auth', (req, res) => {
             },
             process.env.SECRET, 
             {
-              expiresIn: '300s',
+              expiresIn: '300s', //expires in 5 minutes
               audience: process.env.AUDIENCE,
               issuer: process.env.ISSUER,
               subject: 'member'
@@ -60,7 +60,7 @@ router.post('/login/user/auth', (req, res) => {
               }
 
               res.cookie('token', token, {
-                expires: new Date(Date.now() + (30 * 60 * 1000)),
+                expires: new Date(Date.now() + (30 * 60 * 1000)), //expires in 30 minutes
                 // expires: new Date(Date.now() + (30 * 1000)),
                 httpOnly: true,
                 secure: true,
