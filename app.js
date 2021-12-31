@@ -15,18 +15,18 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", '*');
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-  next();
-});
-
 app.use(logger('dev'));
 app.use(express.json());
+
 app.set("trust proxy",1);
+
+app.use(
+  cors({
+    credentials: true,
+    origin: [process.env.FRONTEND_APP_URL]
+  })
+);
+
 app.use(cors({origin: true, credentials: true}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
